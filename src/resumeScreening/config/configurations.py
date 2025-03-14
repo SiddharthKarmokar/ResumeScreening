@@ -10,16 +10,13 @@ class ConfigurationManager:
 
         create_directories([self.config.artifacts_root])
     
-    def get_data_prediction_config(self)->DataPredictionConfig:
+    def get_model_pipeline_config(self)->ModelPipelineConfig:
         config = self.config.data_ingestion
         create_directories([config.root_dir])
 
-        data_ingestion_config = DataPredictionConfig(
+        model_pipeline_config = ModelPipelineConfig(
             root_dir=config.root_dir,
-            source_url=config.source_url,
-            local_data_file=config.local_data_file,
-            unzip_dir=config.unzip_dir,
-            contests_dir=config.contests_dir,
-            authors_file=config.authors_file
+            career_instructions_path: artifacts/career_instructions/
+            resume_instructions_path: artifacts/resume_instructions/
         )
-        return data_ingestion_config
+        return model_pipeline_config

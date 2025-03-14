@@ -1,6 +1,6 @@
 import os
 import yaml
-from src.aiteacher import logger
+from src.resumeScreening import logger
 import json
 import joblib
 from ensure import ensure_annotations

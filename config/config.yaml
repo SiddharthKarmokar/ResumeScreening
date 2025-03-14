@@ -1,4 +1,10 @@
 artifacts_root: artifacts
 
-model_prediction:
-  root_dir: 
+model:
+  root_dir: artifacts/
+  model_name: NousResearch/DeepHermes-3-Llama-3-8B-Preview
+
+agent:
+    root_dir: artifacts
+    career_instructions_path: artifacts/career_instructions/
+    resume_instructions_path: artifacts/resume_instructions/
