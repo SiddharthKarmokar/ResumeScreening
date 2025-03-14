@@ -10,18 +10,12 @@ python-box
 pyYAML
 tqdm
 ensure
-joblib
 types-pyYAML
 Flask
 Flask-Cors
 boto3
-dvc
-dvc-s3
-dagshub
-transformers
 accelerate
 datasets
-torch --index-url https://download.pytorch.org/whl/cu121
 ipykernel
 phidata
 PyPDF2
