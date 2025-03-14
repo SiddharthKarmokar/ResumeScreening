@@ -1,0 +1,4 @@
+artifacts_root: artifacts
+
+model_prediction:
+  root_dir: 
