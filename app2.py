@@ -3,11 +3,10 @@ from phi.agent import Agent
 from phi.tools.duckduckgo import DuckDuckGo
 from PyPDF2 import PdfReader
 from pydantic import BaseModel
-from phi.model.groq import Groq
+from phi.model.huggingface import HuggingFaceChat
 import uvicorn
 import os
 
-os.environ["GROQ_API_KEY"] = "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"
 app = FastAPI()
 
 class UserInfo(BaseModel):
@@ -19,14 +18,13 @@ class UserInfo(BaseModel):
     skills: str
 
 career_agent = Agent(
-    model=Groq(id="llama-3.3-70b-versatile", max_tokens=4096),  # ✅ Corrected Groq model usage
+    model=HuggingFaceChat(id="meta-llama/Meta-Llama-3-8B-Instruct", max_tokens=4096),
     tools=[DuckDuckGo()],
     markdown=True
 )
 
-# Resume Review Agent (Fixed Model)
 resume_agent = Agent(
-    model=Groq(id="llama-3.3-70b-versatile", max_tokens=4096),  # ✅ Corrected Groq model usage
+    model=HuggingFaceChat(id="meta-llama/Meta-Llama-3-8B-Instruct", max_tokens=4096),
     markdown=True
 )
 
@@ -44,34 +42,31 @@ def predict_career(user_info: UserInfo):
     )
 
     try:
-        result = career_agent.run(query, tool_choice="auto")  # ✅ Force tool usage
+        result = career_agent.run(query, tool_choice="auto")
 
-        # Convert tool_calls if present
         if hasattr(result, "tool_calls") and result.tool_calls:
-            result.tool_calls = [t._dict_ for t in result.tool_calls]
+            result.tool_calls = [t.__dict__ for t in result.tool_calls]
 
-        return {"career_advice": result._dict_}  # Convert entire result to a dictionary
+        return {"career_advice": result.__dict__}
     except Exception as e:
         return {"error": str(e)}
 
 @app.post("/predict/advice")
-def predict_career(user_info: UserInfo, text: str):
+def predict_advice(user_info: UserInfo, text: str):
     query = (
         f"Depending on the following user data, provide friendly and cheerful advice to them, also provide any relevant online resources from youtube, wikipedia, research paper articles through DuckDuckGo search: {user_info.model_dump()}. "
         f"user query: {text}"
     )
 
     try:
-        result = career_agent.run(query, tool_choice="auto")  # ✅ Force tool usage
+        result = career_agent.run(query, tool_choice="auto")
 
-        # Convert tool_calls if present
         if hasattr(result, "tool_calls") and result.tool_calls:
-            result.tool_calls = [t._dict_ for t in result.tool_calls]
+            result.tool_calls = [t.__dict__ for t in result.tool_calls]
 
-        return {"emotional_advice": result._dict_}  # Convert entire result to a dictionary
+        return {"emotional_advice": result.__dict__}
     except Exception as e:
         return {"error": str(e)}
-
 
 @app.post("/predict/resume")
 def predict_resume(file: UploadFile = File(...)):
@@ -82,9 +77,9 @@ def predict_resume(file: UploadFile = File(...)):
         query = f"Review this resume and suggest improvements: {resume_text[:1000]}..."
         result = resume_agent.run(query)
 
-        return {"resume_insights": result._dict_}  # Convert result to dictionary
+        return {"resume_insights": result.__dict__}
     except Exception as e:
         return {"error": str(e)}
 
-if _name_ == "_main_":
+if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8080)

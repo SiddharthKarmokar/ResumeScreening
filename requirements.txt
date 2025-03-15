@@ -1,11 +1,6 @@
-pandas
-mlflow
-notebook
 numpy
 fastapi
 uvicorn
-Jinja2
-matplotlib
 python-box
 pyYAML
 tqdm
@@ -16,6 +11,6 @@ Flask-Cors
 boto3
 accelerate
 datasets
-ipykernel
 phidata
 PyPDF2
+python-multipart

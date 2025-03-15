@@ -48,9 +48,9 @@ def predict_career(user_info: UserInfo):
 
         # Convert tool_calls if present
         if hasattr(result, "tool_calls") and result.tool_calls:
-            result.tool_calls = [t._dict_ for t in result.tool_calls]
+            result.tool_calls = [t.__dict__ for t in result.tool_calls]
 
-        return {"career_advice": result._dict_}  # Convert entire result to a dictionary
+        return {"career_advice": result.__dict__}  # Convert entire result to a dictionary
     except Exception as e:
         return {"error": str(e)}
 
@@ -66,9 +66,9 @@ def predict_career(user_info: UserInfo, text: str):
 
         # Convert tool_calls if present
         if hasattr(result, "tool_calls") and result.tool_calls:
-            result.tool_calls = [t._dict_ for t in result.tool_calls]
+            result.tool_calls = [t.__dict__ for t in result.tool_calls]
 
-        return {"emotional_advice": result._dict_}  # Convert entire result to a dictionary
+        return {"emotional_advice": result.__dict__}  # Convert entire result to a dictionary
     except Exception as e:
         return {"error": str(e)}
 
@@ -86,5 +86,5 @@ def predict_resume(file: UploadFile = File(...)):
     except Exception as e:
         return {"error": str(e)}
 
-if __name__ == "_main_":
+if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8080)
